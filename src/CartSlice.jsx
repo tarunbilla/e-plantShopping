@@ -1,40 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export const CartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState: {
     items: [], // Initialize items as an empty array
-    totalQuantity : 0,
+    totalQuantity: 0,
   },
   reducers: {
     addItem: (state, action) => {
-        const {name, image, cost} = action.payload;
-        const existingItem = state.items.find(item => item.name === name);
-        if(existingItem){
-            existingItem.quantity++;
-            state.totalQuantity++;
-        }
-        else{
-            state.items({name, image, cost, quantity: 1});
-            state.totalQuantity++;
-        }
+      const { name, image, cost } = action.payload;
+      const existingItem = state.items.find((item) => item.name === name);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        state.items.push({ name, image, cost, quantity: 1 });
+      }
+      state.totalQuantity++;
     },
     removeItem: (state, action) => {
-        const nameToRemove = action.payload;
-        const itemToRemove = state.items.find(item => item.name === nameToRemove);
+      const { name } = action.payload;
+      const itemIndex = state.items.findIndex((item) => item.name === name);
 
-      if (itemToRemove) {
-        state.totalQuantity -= itemToRemove.quantity;
-        state.items = state.items.filter(item => item.name !== nameToRemove);
+      if (itemIndex != -1) {
+        state.totalQuantity -= state.items[itemIndex].quantity;
+        state.items.splice(itemIndex, 1);
       }
     },
     updateQuantity: (state, action) => {
-        const {name, amount} = action.payload;
-        const existingItem = state.items.find(item => item.name === name);
-        if(existingItem){
-            state.totalQuantity += amount - existingItem.quantity;
-            existingItem.quantity = amount;
-        }
+      const { id, quantity } = action.payload;
+      const existingItem = state.items.find((item) => item.id === id);
+      if (existingItem) {
+        state.totalQuantity += quantity - existingItem.quantity;
+        existingItem.quantity = quantity;
+      }
     },
   },
 });
