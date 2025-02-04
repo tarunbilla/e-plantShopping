@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./ProductList.css";
 import CartItem from "./CartItem";
@@ -10,6 +10,7 @@ function ProductList() {
 
   const dispatch = useDispatch();
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const cartItems = useSelector((state) => state.cart.items);
 
   const plantsArray = [
     {
@@ -260,19 +261,23 @@ function ProductList() {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    fontSize: "20px",
   };
+
   const styleObjUl = {
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
     width: "1100px",
+    margin: "0 auto",
   };
+
   const styleA = {
     color: "white",
-    fontSize: "30px",
     textDecoration: "none",
+    fontSize: "30px",
+    alignItems: "center",
   };
+
   const handleCartClick = (e) => {
     e.preventDefault();
     setShowCart(true); // Set showCart to true when cart icon is clicked
@@ -296,6 +301,17 @@ function ProductList() {
     }));
   };
 
+  useEffect(() => {
+    // Update addedToCart based on cartItems
+    const updatedAddedToCart = {};
+
+    cartItems.forEach((item) => {
+      updatedAddedToCart[item.name] = item.quantity > 0;
+    });
+
+    setAddedToCart(updatedAddedToCart);
+  }, [cartItems]); // This effect runs whenever cartItems changes
+
   return (
     <div>
       <div className="navbar" style={styleObj}>
@@ -303,19 +319,28 @@ function ProductList() {
           <div className="luxury">
             <img
               src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png"
-              alt=""
+              alt="Paradise Nursery Logo"
+              style={{ height: "50px", width: "auto", marginRight: "30px" }}
             />
-            <a href="/" style={{ textDecoration: "none" }}>
+            <a
+              href="/"
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <div>
                 <h3 style={{ color: "white" }}>Paradise Nursery</h3>
-                <i style={{ color: "white" }}>Where Green Meets Serenity</i>
+                <i style={{ color: "white", fontSize: "smaller" }}>
+                  Where Green Meets Serenity
+                </i>
               </div>
             </a>
           </div>
         </div>
         <div style={styleObjUl}>
           <div>
-            {" "}
             <a href="#" onClick={(e) => handlePlantsClick(e)} style={styleA}>
               Plants
             </a>
