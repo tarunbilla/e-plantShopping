@@ -256,7 +256,7 @@ function ProductList() {
   ];
   const styleObj = {
     backgroundColor: "#4CAF50",
-    color: "#fff!important",
+    color: "#fff",
     padding: "15px",
     display: "flex",
     justifyContent: "space-between",
@@ -271,11 +271,18 @@ function ProductList() {
     margin: "0 auto",
   };
 
+  const centerNav = {
+    flex: 1, // Pushes the text to center
+    display: "flex",
+    justifyContent: "center",
+    position: "relative",
+    left: "-150px",
+  };
+
   const styleA = {
     color: "white",
     textDecoration: "none",
     fontSize: "30px",
-    alignItems: "center",
   };
 
   const handleCartClick = (e) => {
@@ -320,7 +327,7 @@ function ProductList() {
             <img
               src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png"
               alt="Paradise Nursery Logo"
-              style={{ height: "50px", width: "auto", marginRight: "30px" }}
+              style={{ height: "50px", width: "auto", marginRight: "40px" }}
             />
             <a
               href="/"
@@ -332,7 +339,13 @@ function ProductList() {
             >
               <div>
                 <h3 style={{ color: "white" }}>Paradise Nursery</h3>
-                <i style={{ color: "white", fontSize: "smaller" }}>
+                <i
+                  style={{
+                    color: "white",
+                    fontSize: "smaller",
+                    justifyContent: "center",
+                  }}
+                >
                   Where Green Meets Serenity
                 </i>
               </div>
@@ -340,7 +353,7 @@ function ProductList() {
           </div>
         </div>
         <div style={styleObjUl}>
-          <div>
+          <div style={centerNav}>
             <a href="#" onClick={(e) => handlePlantsClick(e)} style={styleA}>
               Plants
             </a>
@@ -389,27 +402,45 @@ function ProductList() {
           {plantsArray.map((category, index) => {
             return (
               <div key={index}>
-                <h1>
-                  <div className="category">{category.category}</div>
-                </h1>
+                <div
+                  className="category"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <h1>{category.category}</h1>
+                </div>
                 <div className="product-list">
                   {category.plants.map((plant, plantIndex) => {
                     return (
                       <div className="product-card" key={plantIndex}>
+                        <div className="product-title">{plant.name}</div>
                         <img
                           className="product-image"
                           src={plant.image}
                           alt={plant.name}
                         />
-                        <div className="product-title">{plant.name}</div>
+                        <div
+                          className="product-cost"
+                          style={{ color: "orange" }}
+                        >
+                          {plant.cost}
+                        </div>
                         <div className="product-description">
                           {plant.description}
                         </div>
-                        <div className="product-cost">{plant.cost}</div>
                         <button
                           className="product-button"
                           onClick={() => handleAddToCart(plant)}
                           disabled={addedToCart[plant.name]}
+                          style={{
+                            backgroundColor: addedToCart[plant.name]
+                              ? "gray"
+                              : "",
+                          }}
                         >
                           {addedToCart[plant.name]
                             ? "Added to Cart"
